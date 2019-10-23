@@ -2,6 +2,7 @@ const { User } = require('../../../models/user');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const mongoose = require('mongoose');
+const {JsonWebTokenError} = require("jsonwebtoken");
 
 describe('user.generateAuthToken', () => {
     let payload;
@@ -32,4 +33,13 @@ describe('user.generateAuthToken', () => {
         const decoded = await exec();
         expect(decoded.role.name).toBeFalsy();
     });
+
+    it('should return an invalid JWT with incorrect private key', async () => {
+        const user = new User(payload);
+        const token = user.generateAuthToken();
+        expect(() => {
+            jwt.verify(token, '1234567890222');
+        }).toThrow(JsonWebTokenError);
+    });
+
 });
