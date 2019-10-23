@@ -1,3 +1,9 @@
+describe('/api/users', () => {
+    it('should fill space', () => {
+
+    });
+});
+
 /*
     A user should:
         - Have a profile

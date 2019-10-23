@@ -2,57 +2,24 @@ const config = require('config');
 const mongoose = require('mongoose');
 const Joi = require('joi');
 const jwt = require('jsonwebtoken');
+const { addressSchema, validateAddress } = require('./subschemas/address');
+const { imageSchema, validateImage } = require('./subschemas/image');
 const { isEmail } = require('validator');
+const { roleSchema, validateRole } = require('./role');
+const { venueSchema, validateVenue } = require('./venue');
 require('mongoose-type-url');
-
-const roleSchema = new mongoose.Schema({});
-
-const addressSchema = new mongoose.Schema({
-    city: {
-        type: String,
-        required: true,
-        minLength: 3,
-        maxLength: 50,
-    },
-    region: {
-        type: String,
-        required: true,
-        minLength: 3,
-        maxLength: 50,
-    },
-    postal: {
-        type: String,
-        required: true,
-        minLength: 5,
-        maxLength: 10,
-    },
-    country: {
-        type: String,
-        required: true,
-        minLength: 3,
-        maxLength: 50,
-    }
-});
-
-const imageSchema = new mongoose.Schema({
-
-});
-
-const venueSchema = new mongoose.Schema({
-
-});
 
 const userSchema = new mongoose.Schema({
     first_name: {
         type: String,
         required: true,
-        minLength: 5,
+        minLength: 1,
         maxLength: 50,
     },
     last_name: {
         type: String,
         required: true,
-        minLength: 5,
+        minLength: 1,
         maxLength: 50,
     },
     email: {
@@ -121,14 +88,17 @@ const userSchema = new mongoose.Schema({
             min: 3,
             max: 255
         },
-        venue: venueSchema
+        venue: {
+            type: venueSchema,
+            required: true
+        },
     }]
 });
 
 userSchema.methods.generateAuthToken = function() {
     return jwt.sign({
         _id: this._id,
-        isAdmin: this.isAdmin
+        role: this.role
     }, config.get('jwtPrivateKey'));
 };
 
@@ -136,13 +106,27 @@ const User = mongoose.model('User', userSchema);
 
 async function validateUser(user) {
     const schema = {
-        name: Joi.string().trim().min(5).max(50).required(),
+        first_name: Joi.string().trim().min(1).max(50).required(),
+        last_name: Joi.string().trim().min(1).max(50).required(),
         email: Joi.string().email().min(5).max(255).required(),
-        password: Joi.string().min(5).max(255).trim().required()
+        password: Joi.string().min(5).max(20).trim().required(),
+        //social_data: TODO validate social data from client
+        bio: Joi.string().trim().min(10).max(1000),
+        clip_url: Joi.string().uri(),
+        points: Joi.number().min(0),
+        contact_email: Joi.string().email().min(5).max(255).required(),
+        // shows_managed:  TODO validate shows_managed from client
     };
 
     try {
-        await Joi.validate(user, schema);
+        await Promise.all([
+            Joi.validate(user, schema),
+            validateAddress(user.address),
+            validateImage(user.profile_image),
+            validateImage(user.header_image),
+            validateRole(user.role),
+            user.shows_managed === undefined ? null : validateVenue(user.show)
+        ]);
     } catch (ex) {
         return {
             error: {

@@ -1,14 +1,20 @@
 {
   "name": "stagetime-api",
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "engines": {
+    "node": "10.16.3"
+  },
   "version": "1.0.0",
   "description": "API for managing comedy functions and open mics",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --runInBand"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:sitrick2/stagetime-api.git"
+    "url": "https://github.com/sitrick2/stagetime-api.git"
   },
   "author": "David Sitrick",
   "license": "ISC",
@@ -24,5 +30,11 @@
     "validator": "^11.1.0",
     "winston": "^3.2.1",
     "winston-mongodb": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.19",
+    "@types/sinon": "^7.5.0",
+    "jest": "^24.9.0",
+    "sinon": "^7.5.0"
   }
 }
