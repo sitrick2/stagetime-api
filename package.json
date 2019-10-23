@@ -1,0 +1,28 @@
+{
+  "name": "stagetime-api",
+  "version": "1.0.0",
+  "description": "API for managing comedy functions and open mics",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:sitrick2/stagetime-api.git"
+  },
+  "author": "David Sitrick",
+  "license": "ISC",
+  "dependencies": {
+    "@types/winston": "^2.4.4",
+    "config": "^3.2.3",
+    "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
+    "joi": "^14.3.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.7.6",
+    "mongoose-type-url": "^1.0.6",
+    "validator": "^11.1.0",
+    "winston": "^3.2.1",
+    "winston-mongodb": "^5.0.0"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "jwtPrivateKey": "1234",
+  "db": "mongodb://localhost/stagetime",
+  "social_platforms": [
+    "twitter",
+    "facebook",
+    "instagram",
+    "youtube",
+    "tiktok",
+    "snapchat"
+  ]
+
+}

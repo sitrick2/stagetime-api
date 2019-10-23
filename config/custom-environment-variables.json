@@ -1,0 +1,4 @@
+{
+  "jwtPrivateKey": "stagetime_api_jwtPrivateKey",
+  "db": "stagetime_db"
+}
