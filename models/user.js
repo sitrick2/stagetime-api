@@ -76,7 +76,6 @@ const userSchema = new mongoose.Schema({
     contact_email: {
         type: String,
         unique: true,
-        required: true,
         minLength: 5,
         maxLength: 255,
         validate: [isEmail, 'invalid email']
