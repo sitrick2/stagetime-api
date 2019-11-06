@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const winston = require('winston');
 const config = require('config');
+const logger = require('./logging')();
 
 module.exports = function () {
     const options = {
@@ -12,5 +12,5 @@ module.exports = function () {
 
     const db = config.get('db');
     mongoose.connect(db, options)
-        .then(() => winston.info(`Connected to ${ db }...`));
+        .then(() => logger.info(`Connected to ${ db }...`));
 };

@@ -10,13 +10,30 @@ let me;
 describe('/api/users', () => {
     beforeEach(async() => {
         server = require('../../../index');
-        me = await User.create({ name: 'David', email: "sitrick2@gmail.com", password : "TEST1234", isAdmin: true });
+        me = await User.create({
+            first_name: 'David',
+            last_name: 'Sitrick',
+            email: "sitrick2@gmail.com",
+            password : "TEST1234",
+            address: {
+                city: "Brooklyn",
+                region: "New York",
+                postal: "11238",
+                country: "United States"
+            } });
+
         token = await me.generateAuthToken();
         uploadData = {
             first_name: 'David',
             last_name: 'Sitrick',
-            email: 'sitrick2@gmail.com',
-            password: 'TEST1234'
+            email: 'sitrick3@gmail.com',
+            password: 'TEST1234',
+            address: {
+                city: "Brooklyn",
+                region: "New York",
+                postal: "11238",
+                country: "United States"
+            }
         }
     });
 
@@ -25,24 +42,24 @@ describe('/api/users', () => {
         await server.close();
     });
 
-    describe('GET /', () => {
-        it('should return 403 if logged in user is not an admin or host');
-        it('should return 401 if user is not logged in');
-        it('should return 200 if the user has permission and is logged in');
-        it('should return all users if privileges allow');
-        it('should only return users the logged in users role can manage');
-        it('should not return password information');
-        it('should not return login tokens');
-    });
-
-    describe('GET /me', () => {
-        it('should return 404 if user is not logged in');
-        it('should return 200 if user is logged in');
-        it('should return data for logged in user');
-        it('should not return data for users other than logged in user');
-        it('should not return password information');
-        it('should not return login tokens');
-    });
+    // describe('GET /', () => {
+    //     it('should return 403 if logged in user is not an admin or host');
+    //     it('should return 401 if user is not logged in');
+    //     it('should return 200 if the user has permission and is logged in');
+    //     it('should return all users if privileges allow');
+    //     it('should only return users the logged in users role can manage');
+    //     it('should not return password information');
+    //     it('should not return login tokens');
+    // });
+    //
+    // describe('GET /me', () => {
+    //     it('should return 404 if user is not logged in');
+    //     it('should return 200 if user is logged in');
+    //     it('should return data for logged in user');
+    //     it('should not return data for users other than logged in user');
+    //     it('should not return password information');
+    //     it('should not return login tokens');
+    // });
 
     describe('GET /:id', () => {
 
@@ -103,7 +120,7 @@ describe('/api/users', () => {
             const res = await exec();
             expect(res.status).toBe(200);
             expect(Object.keys(res.body)).toEqual(expect.arrayContaining([
-                'name', 'email', '_id'
+                'first_name', 'last_name', 'email', 'address'
             ]));
             expect(res.body.email).toMatch('sitrick4@gmail.com');
         });
@@ -123,11 +140,12 @@ describe('/api/users', () => {
                     .set('x-auth-token', token);
             };
 
-            it('should return 403 if logged in user is not an admin.', async () => {
-                token = user.generateAuthToken();
-                const res = await exec();
-                expect(res.status).toBe(403);
-            });
+            // //@TODO add roles
+            // it('should return 403 if logged in user is not an admin.', async () => {
+            //     token = user.generateAuthToken();
+            //     const res = await exec();
+            //     expect(res.status).toBe(403);
+            // });
 
             it('should return 404 if user does not exist.', async () => {
                 user = { _id : mongoose.Types.ObjectId() };

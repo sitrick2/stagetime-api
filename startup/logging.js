@@ -1,18 +1,41 @@
-const winston = require('winston');
+const { createLogger, format, transports } = require('winston');
+const { combine, timestamp } = format;
+const { defaultFormat, errorFormat } = require ('../logging/formatters');
 require('winston-mongodb');
 require('express-async-errors');
-const config = require('config');
 
 module.exports = function () {
-    const logger = winston.createLogger({
+
+    const logger = createLogger({
         level: 'info',
-        format: winston.format.json(),
+        format: format.json(),
         defaultMeta: { service: 'user-service' },
         transports: [
-            new winston.transports.File({ filename: '/logs/error.log', level: 'error', handleExceptions: true }),
-            new winston.transports.File({ filename: '/logs/testing.log', level: 'debug' }),
-            new winston.transports.File({filename: '/logs/combined.log'}),
-            new winston.transports.MongoDB({ db: config.get('db'), level: 'error' })
+            new transports.File({
+                filename: `${__dirname}/../logs/combined.log`,
+                format: combine(
+                    timestamp(),
+                    defaultFormat
+                )
+            }),
+
+            new transports.File({
+                filename: `${__dirname}/../logs/error.log`,
+                format: combine(
+                    timestamp(),
+                    errorFormat
+                ),
+                level: 'error'
+            }),
+
+            new transports.File({
+                filename: `${__dirname}/../logs/testing.log`,
+                format: combine(
+                    timestamp(),
+                    defaultFormat
+                ),
+                level: 'debug'
+            }),
         ],
     });
 
@@ -21,10 +44,13 @@ module.exports = function () {
     });
 
     if (process.env.NODE_ENV !== 'production') {
-        logger.add(new winston.transports.Console({
-            format: winston.format.combine(
-                winston.format.prettyPrint(),
-                winston.format.colorize()
+        logger.add(new transports.Console({
+            format: format.combine(
+                format.timestamp(),
+                format.simple(),
+                format.printf(msg =>
+                    format.colorize().colorize(msg.level, `${msg.timestamp} - ${msg.level}: ${msg.message}`)
+                )
             )})
         );
     }

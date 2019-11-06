@@ -10,7 +10,7 @@
   "description": "API for managing comedy functions and open mics",
   "main": "index.js",
   "scripts": {
-    "test": "jest --runInBand"
+    "test": "jest --runInBand --detectOpenHandles"
   },
   "repository": {
     "type": "git",
@@ -21,14 +21,17 @@
   "dependencies": {
     "@types/winston": "^2.4.4",
     "bcrypt": "^3.0.6",
+    "body-parser": "latest",
     "config": "^3.2.3",
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
     "joi": "^14.3.1",
     "jsonwebtoken": "^8.5.1",
+    "lodash": "latest",
     "moment": "^2.24.0",
-    "mongoose": "^5.7.6",
+    "mongoose": "^5.7.7",
     "mongoose-type-url": "^1.0.6",
+    "mongoose-unique-validator": "^2.0.3",
     "validator": "^11.1.0",
     "winston": "^3.2.1",
     "winston-mongodb": "^5.0.0"
