@@ -102,7 +102,9 @@ userSchema.methods.generateAuthToken = function() {
     return jwt.sign({
         _id: this._id,
         // role: this.role
-    }, config.get('jwtPrivateKey'));
+    }, config.get('jwtPrivateKey'), {
+        expiresIn: '15m'
+    });
 };
 
 const User = mongoose.model('User', userSchema);
@@ -113,7 +115,10 @@ async function validateUser(user) {
         last_name: Joi.string().trim().min(1).max(50).required(),
         email: Joi.string().email().min(5).max(255).required(),
         password: Joi.string().min(5).max(20).trim().required(),
-        address: Joi.required(),
+        city: Joi.string().min(3).max(50).trim().required(),
+        region: Joi.string().min(3).max(50).trim().required(),
+        country: Joi.string().min(3).max(50).trim().required(),
+        postal: Joi.string().min(5).max(10).regex(/^\d+$/).required()
         //social_data: TODO validate social data from client
         // bio: Joi.string().trim().min(10).max(1000),
         // clip_url: Joi.string().uri(),

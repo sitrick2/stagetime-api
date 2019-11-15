@@ -1,4 +1,6 @@
 {
   "jwtPrivateKey": "stagetime_api_jwtPrivateKey",
-  "db": "stagetime_db"
+  "db": "stagetime_db",
+  "frontendUrl": "stagetime_frontend_url",
+  "csrfKey": "stagetime_api_sessionKey"
 }

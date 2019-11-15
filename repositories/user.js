@@ -12,16 +12,22 @@ exports.getAllUsers = async () => {
 };
 
 exports.storeUser = async (req) => {
+    let address = {
+        city: req.body.city,
+        region: req.body.region,
+        postal: req.body.postal,
+        country: req.body.country
+    };
+
     let user = await new User(_.pick(req.body, [
         'first_name',
         'last_name',
         'email',
-        'password',
-        'address'
+        'password'
     ]));
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(user.password, salt);
-
+    user.address = address;
     await user.save();
 
     return user;
