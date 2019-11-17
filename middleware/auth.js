@@ -10,7 +10,7 @@ module.exports = function (req, res, next) {
         req.user = jwt.verify(token, config.get('jwtPrivateKey'));
         next();
     } catch (ex) {
-        res.status(400).send('Invalid token.');
+        res.status(400).send('Invalid login.');
     }
 
 };

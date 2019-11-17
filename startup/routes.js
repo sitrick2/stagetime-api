@@ -2,7 +2,6 @@ const users = require('../routes/users');
 const auth = require('../routes/auth');
 const error = require('../middleware/error');
 const cors = require('../middleware/cors');
-const csrf = require('../middleware/csrf');
 const bodyParser = require('body-parser');
 
 module.exports = function (app) {
