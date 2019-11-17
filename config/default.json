@@ -9,7 +9,7 @@
     "tiktok",
     "snapchat"
   ],
-  "frontendUrl": "http://localhost:8080",
+  "frontendUrl": "https://localhost:8080",
   "sessionKey": "9731f07f-7fb2-4d1a-89e3-953b67624a83"
 
 }
